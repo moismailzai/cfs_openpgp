@@ -1,8 +1,8 @@
 # cfs_openpgp
 Mostly, this crate is just an excuse to familiarize myself with Rust.
 
-Imagine you have a secure, real-world source of entropy that you use as a master key (for instance, 
-https://dicekeys.com/). You may reasonably wish to use the same master (combined with a salt) to generate reproducible
+Imagine you have a secure, real-world source of entropy that you use as a root key (for instance, 
+https://dicekeys.com/). You may reasonably wish to use the same root (combined with a salt) to generate reproducible
 cryptographic secret keys. This way, if your cryptographic secrets are ever compromised, you can use the secure 
 physical key with a new salt to generate new ones. If your secrets are lost, however, you can just rebuild them using 
 your physical key and the previous salt.
