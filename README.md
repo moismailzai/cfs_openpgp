@@ -24,6 +24,9 @@ cargo run -- --username "Alice" --email "alice@example.com" --secret "a super-se
 This will output your ASCII-armored PGP certificate, a revocation signature, and the IDs and ASCII-armored 
 representations of each key.
 
+*NOTE: BE SURE TO USE THE EXACT SAME VERSION OF THIS LIBRARY (AND THUS THE SAME NETTLE AND SEQUOIA-OPENPGP LIBRARIES) 
+OR YOU MAY NOT GENERATE THE SAME KEY.*
+
 # acknowledgements
 Many thanks to [Neal Walfield](https://github.com/nwalfield) of the [sequoia_openpgp](https://www.sequoia-pgp.org/) project for 
 all the help on freenode #sequoia.
