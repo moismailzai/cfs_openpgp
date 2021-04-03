@@ -1,0 +1,17 @@
+[package]
+authors = ["moismailzai"]
+categories = ["cryptography"]
+description = "cfs_openpgp generates a valid OpenPGP certificate based on the username, email, and secret you provide. Though the ASCII-armored representation of the cert will differ, the same input should. always produce the same keys. Obviously, this is highly insecure and should never be used or unicorns and kittens will cry."
+edition = "2018"
+keywords = ["clippy", "lint", "plugin"]
+license = "MIT"
+name = "cfs_openpgp"
+readme = "README.md"
+repository = "https://github.com/moismailzai/cfs_openpgp"
+version = "0.1.0"
+
+[dependencies]
+clap = "3.0.0-beta.2"
+nettle = "7.0.1"
+sequoia-openpgp = "1.1.0"
+sha2 = "0.9"
