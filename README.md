@@ -7,7 +7,7 @@ cryptographic secret keys. This way, if your cryptographic secrets are ever comp
 physical key with a new salt to generate new ones. If your secrets are lost, however, you can just rebuild them using 
 your physical key and the previous salt.
 
-This application is a very thin wrapper around sequoia_openpgp that takes an input passphrase and generates a valid pgp 
+This application is a very thin wrapper around `sequoia_openpgp` that takes an input passphrase and generates a valid pgp 
 certificate with a primary EdDSA Edwards-curve Digital Signature Algorithm key and 4 subordinate keys:
 
 * authentication (EdDSA Edwards-curve Digital Signature Algorithm)
@@ -16,13 +16,14 @@ certificate with a primary EdDSA Edwards-curve Digital Signature Algorithm key a
 * signing (EdDSA Edwards-curve Digital Signature Algorithm)
 
 # usage
-Run like so:
+Clone the codebase locally and run like so:
 ```
-cfs_openpgp --secret "a super-secure secret phrase that's been generated from real entropy"
+cargo run -- --username "Alice" --email "alice@example.com" --secret "a super-secure secret phrase that's been generated from real entropy"
 ```
 
 This will output your ASCII-armored PGP certificate, a revocation signature, and the IDs and ASCII-armored 
 representations of each key.
 
 # acknowledgements
-Many thanks to @nwalfield of the [Sequoia](https://www.sequoia-pgp.org/) project for all the help on freenode/#sequoia.
+Many thanks to [Neil Walfield](https://github.com/nwalfield) of the [sequoia_openpgp](https://www.sequoia-pgp.org/) project for 
+all the help on freenode #sequoia.
