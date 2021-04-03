@@ -25,5 +25,5 @@ This will output your ASCII-armored PGP certificate, a revocation signature, and
 representations of each key.
 
 # acknowledgements
-Many thanks to [Neil Walfield](https://github.com/nwalfield) of the [sequoia_openpgp](https://www.sequoia-pgp.org/) project for 
+Many thanks to [Neal Walfield](https://github.com/nwalfield) of the [sequoia_openpgp](https://www.sequoia-pgp.org/) project for 
 all the help on freenode #sequoia.
