@@ -15,7 +15,7 @@ use sequoia_openpgp::types::{
 use sequoia_openpgp::{Cert, Packet};
 use sha2::{Digest, Sha512};
 
-use crate::{get_secret_phrase, get_userid};
+use crate::{get_secret_phrase, get_userid, get_key_creation_time};
 
 /// Given a salt, applies it to the global secret phrase and uses it as a seed value to generate a
 /// Ed25519 key.
@@ -32,7 +32,7 @@ pub fn ed25519_key_from_seed(salt: &str) -> Key<SecretParts, SubordinateRole> {
     Key::from(
         Key4::<SecretParts, SubordinateRole>::import_secret_ed25519(
             &*key_from_seed,
-            SystemTime::UNIX_EPOCH,
+            get_key_creation_time(),
         )
         .unwrap(),
     )
@@ -55,7 +55,7 @@ pub fn cv25519_key_from_seed(salt: &str) -> Key<SecretParts, SubordinateRole> {
             &*key_from_seed,
             None,
             None,
-            SystemTime::UNIX_EPOCH,
+            get_key_creation_time(),
         )
         .unwrap(),
     )
@@ -80,7 +80,7 @@ pub fn rsa_key_from_seed(salt: &str) -> Key<SecretParts, SubordinateRole> {
             &rsa_secret.d(),
             &rsa_secret.primes().0,
             &rsa_secret.primes().1,
-            SystemTime::UNIX_EPOCH,
+            get_key_creation_time(),
         )
         .unwrap(),
     )
@@ -137,7 +137,6 @@ pub fn signed_subkeys(mut cert: Cert) -> Cert {
         // .set_key_validity_period(blueprint.validity.or(self.primary.validity))?;
         if key_flags == KeyFlags::empty().set_signing() {
             let backsig = signature::SignatureBuilder::new(SignatureType::PrimaryKeyBinding)
-                // .set_signature_creation_time(SystemTime::from(SystemTime::UNIX_EPOCH)).unwrap()
                 // GnuPG wants at least a 512-bit hash for P521 keys.
                 .set_hash_algo(HashAlgorithm::SHA512)
                 .sign_primary_key_binding(&mut subkey_kp, &primary_key, &subkey)
@@ -166,7 +165,7 @@ pub fn signed_primary_key() -> (Vec<Packet>, Signature) {
     let primary_key = Key::from(
         Key4::<SecretParts, PrimaryRole>::import_secret_ed25519(
             &*key_from_seed,
-            SystemTime::UNIX_EPOCH,
+            get_key_creation_time(),
         )
         .unwrap(),
     );
@@ -200,6 +199,7 @@ pub fn signed_primary_key() -> (Vec<Packet>, Signature) {
 /// * `cert` - The `Cert` whose `UserID` you wish to sign.
 /// * `cert_sb` - The `SignatureBuilder` associated with the `Cert`.
 pub fn sign_cert_uid(cert: Cert, cert_sb: SignatureBuilder) -> Cert {
+    let current_time = SystemTime::now();
     let mut primary_keypair: KeyPair = cert
         .primary_key()
         .key()
@@ -209,7 +209,7 @@ pub fn sign_cert_uid(cert: Cert, cert_sb: SignatureBuilder) -> Cert {
         .into_keypair()
         .unwrap();
     let uid_sb = cert_sb
-        .set_signature_creation_time(SystemTime::UNIX_EPOCH)
+        .set_signature_creation_time(current_time)
         .unwrap()
         .set_type(SignatureType::PositiveCertification)
         .set_hash_algo(HashAlgorithm::SHA512)

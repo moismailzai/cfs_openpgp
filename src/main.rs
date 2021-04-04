@@ -2,6 +2,7 @@
 
 use clap::Clap;
 use sequoia_openpgp::packet::UserID;
+use std::time::{SystemTime, Duration};
 
 mod generate;
 mod output;
@@ -10,7 +11,7 @@ fn get_userid() -> UserID {
     let opts: Opts = Opts::parse();
     UserID::from_address(
         opts.username.clone().into(),
-        opts.comment.clone(),
+        None, // see http://web.archive.org/web/20201020082313/https://debian-administration.org/users/dkg/weblog/97
         opts.email,
     )
     .unwrap()
@@ -19,6 +20,17 @@ fn get_userid() -> UserID {
 fn get_secret_phrase() -> String {
     let opts: Opts = Opts::parse();
     opts.secret
+}
+
+fn get_key_creation_time() -> SystemTime {
+    let opts: Opts = Opts::parse();
+    let date: SystemTime;
+    if opts.key_sig_time == None {
+        date = SystemTime::UNIX_EPOCH;
+    } else {
+        date = SystemTime::UNIX_EPOCH + Duration::from_secs(opts.key_sig_time.unwrap().parse::<u64>().unwrap());
+    }
+    date
 }
 
 fn main() {
@@ -36,7 +48,7 @@ fn main() {
 #[clap(version = "0.1.0", author = "Mo Ismailzai <mo@ismailzai.com>")]
 struct Opts {
     #[clap(short, long)]
-    comment: Option<String>,
+    key_sig_time: Option<String>,
     #[clap(short, long, default_value = "alice@example.com")]
     email: String,
     #[clap(short, long)]

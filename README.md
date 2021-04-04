@@ -18,7 +18,7 @@ certificate with a primary EdDSA Edwards-curve Digital Signature Algorithm key a
 # usage
 Clone the codebase locally and run like so:
 ```
-cargo run -- --username "Alice" --email "alice@example.com" --secret "a super-secure secret phrase that's been generated from real entropy"
+cargo run -- --username "Alice" --email "alice@example.com" --key-sig-time 0 --secret "a super-secure secret phrase that's been generated from real entropy"
 ```
 
 This will output your ASCII-armored PGP certificate, a revocation signature, and the IDs and ASCII-armored 
