@@ -34,6 +34,21 @@ fn get_key_creation_time() -> SystemTime {
     date
 }
 
+fn get_key_expiration_time() -> Option<SystemTime> {
+    let opts: Opts = Opts::parse();
+    if opts.weeks_subkeys_exp_in == None {
+        None
+    } else {
+        Some(
+            SystemTime::now()
+                + Duration::new(
+                    opts.weeks_subkeys_exp_in.unwrap().parse::<u64>().unwrap() * 7 * 24 * 60 * 60,
+                    0,
+                ),
+        )
+    }
+}
+
 fn main() {
     let (cert, revocation) = generate::cert_and_revoc();
     output::print_cert(&cert);
@@ -48,12 +63,14 @@ fn main() {
 #[derive(Clap)]
 #[clap(version = "0.1.0", author = "Mo Ismailzai <mo@ismailzai.com>")]
 struct Opts {
-    #[clap(short, long)]
-    key_sig_time: Option<String>,
     #[clap(short, long, default_value = "alice@example.com")]
     email: String,
+    #[clap(short, long)]
+    key_sig_time: Option<String>,
     #[clap(short, long)]
     secret: String,
     #[clap(short, long, default_value = "Alice")]
     username: String,
+    #[clap(short, long)]
+    weeks_subkeys_exp_in: Option<String>,
 }

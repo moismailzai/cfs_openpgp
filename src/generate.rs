@@ -15,7 +15,7 @@ use sequoia_openpgp::types::{
 use sequoia_openpgp::{Cert, Packet};
 use sha2::{Digest, Sha512};
 
-use crate::{get_key_creation_time, get_secret_phrase, get_userid};
+use crate::{get_key_creation_time, get_key_expiration_time, get_secret_phrase, get_userid};
 
 /// Given a salt, applies it to the global secret phrase and uses it as a seed value to generate a
 /// Ed25519 key.
@@ -133,8 +133,9 @@ pub fn signed_subkeys(mut cert: Cert) -> Cert {
             .set_features(Features::sequoia())
             .unwrap()
             .set_key_flags(key_flags.clone())
+            .unwrap()
+            .set_key_expiration_time(&subkey, get_key_expiration_time())
             .unwrap();
-        // .set_key_validity_period(blueprint.validity.or(self.primary.validity))?;
         if key_flags == KeyFlags::empty().set_signing() {
             let backsig = signature::SignatureBuilder::new(SignatureType::PrimaryKeyBinding)
                 // GnuPG wants at least a 512-bit hash for P521 keys.
