@@ -2,7 +2,7 @@
 
 use clap::Clap;
 use sequoia_openpgp::packet::UserID;
-use std::time::{SystemTime, Duration};
+use std::time::{Duration, SystemTime};
 
 mod generate;
 mod output;
@@ -28,7 +28,8 @@ fn get_key_creation_time() -> SystemTime {
     if opts.key_sig_time == None {
         date = SystemTime::UNIX_EPOCH;
     } else {
-        date = SystemTime::UNIX_EPOCH + Duration::from_secs(opts.key_sig_time.unwrap().parse::<u64>().unwrap());
+        date = SystemTime::UNIX_EPOCH
+            + Duration::from_secs(opts.key_sig_time.unwrap().parse::<u64>().unwrap());
     }
     date
 }

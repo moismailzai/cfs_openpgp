@@ -15,7 +15,7 @@ use sequoia_openpgp::types::{
 use sequoia_openpgp::{Cert, Packet};
 use sha2::{Digest, Sha512};
 
-use crate::{get_secret_phrase, get_userid, get_key_creation_time};
+use crate::{get_key_creation_time, get_secret_phrase, get_userid};
 
 /// Given a salt, applies it to the global secret phrase and uses it as a seed value to generate a
 /// Ed25519 key.
